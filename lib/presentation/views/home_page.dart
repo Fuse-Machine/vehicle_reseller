@@ -15,11 +15,16 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 35),
-              NameCard(
-                owner: Owner(
-                    name: 'Krishna Bdr. Shrestha',
-                    phone: '98417058455',
-                    email: 'krishna705844@gmail.com'),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/settingsPage');
+                },
+                child: NameCard(
+                  owner: Owner(
+                      name: 'Krishna Bdr. Shrestha',
+                      phone: '98417058455',
+                      email: 'krishna705844@gmail.com'),
+                ),
               ),
               const SizedBox(height: 35),
               _buildIconCard(context),
@@ -42,7 +47,9 @@ class HomePage extends StatelessWidget {
               backgroundColor: const Color.fromARGB(255, 175, 250, 250),
               title: 'Statement',
               icon: FontAwesomeIcons.buildingColumns,
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed('/statementPage');
+              },
             ),
             IconCard(
               backgroundColor: const Color.fromARGB(255, 250, 175, 250),

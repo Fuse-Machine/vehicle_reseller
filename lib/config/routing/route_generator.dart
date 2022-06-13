@@ -3,10 +3,12 @@ import 'package:vehicle_reseller/presentation/views/buy/buy_form.dart';
 import 'package:vehicle_reseller/presentation/views/buy_page.dart';
 import 'package:vehicle_reseller/presentation/views/car_page.dart';
 import 'package:vehicle_reseller/presentation/views/home_page.dart';
+import 'package:vehicle_reseller/presentation/views/settings_page.dart';
 import 'package:vehicle_reseller/presentation/views/repair/repair_form.dart';
 import 'package:vehicle_reseller/presentation/views/repair_page.dart';
 import 'package:vehicle_reseller/presentation/views/sell/sell_form.dart';
 import 'package:vehicle_reseller/presentation/views/sell_page.dart';
+import 'package:vehicle_reseller/presentation/views/statement_page.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -38,8 +40,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SellForm());
       case '/repairForm':
         return MaterialPageRoute(builder: (_) => const RepairForm());
-        case '/carPage':
+      case '/carPage':
         return MaterialPageRoute(builder: (_) => const CarPage());
+      case '/settingsPage':
+        return MaterialPageRoute(builder: (_) => const SettingsPage());
+      case '/statementPage':
+        return MaterialPageRoute(builder: (_) => const Statementpage());
     }
 
     return _errorRoute(settings.name);

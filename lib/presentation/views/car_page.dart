@@ -1,4 +1,4 @@
-import 'package:flip_card/flip_card.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/presentation/views/custom_appbar.dart';
@@ -23,24 +23,61 @@ class CarPage extends StatelessWidget {
           CustomAppbar(
             appbarTitle: 'Cars',
           ),
-          const SizedBox(height: 20),
-          FlipCard(
-            fill: Fill.fillFront,
-            front: Stack(
-              alignment: AlignmentDirectional.topStart,
-              children: [
-                _buildCarCard(),
-                _buildSoldText(),
-              ],
-            ),
-            back: const Padding(
-              padding: EdgeInsets.all(28.0),
-              child: PurchaseDetails(),
-            ),
-          ),
+          const SizedBox(height: 30),
+          _buildCarList(context),
           const SizedBox(height: 15),
         ],
       )),
+    );
+  }
+
+  Column _buildCarList(BuildContext context) {
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return const SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(28.0),
+                    child: PurchaseDetails(),
+                  ),
+                );
+              },
+            );
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.topStart,
+            children: [
+              _buildCarCard(),
+              _buildSoldText(),
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return const SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(28.0),
+                    child: PurchaseDetails(),
+                  ),
+                );
+              },
+            );
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.topStart,
+            children: [
+              _buildCarCard(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
