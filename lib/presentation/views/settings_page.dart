@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vehicle_reseller/data/model/user/user.dart';
+import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
 import 'package:vehicle_reseller/presentation/widgets/divider_with_text.dart';
 import 'package:vehicle_reseller/presentation/widgets/text_field_widget.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  bool isVisible = false;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {},
+        child: const Icon(Icons.add),
+      ),
       appBar: AppBar(
         foregroundColor: Colors.black,
         title: const Text(
@@ -20,8 +33,16 @@ class SettingsPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buldProfileCard(context),
+          children: [
+            BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
+                if (state is ReceivedUserData) {
+                  return _buldProfileCard(context, state.user);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            _buildPersonalFormDialog(context),
             const SizedBox(height: 10.0),
             _buildSettingCard(),
             const SizedBox(height: 20.0),
@@ -32,7 +53,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Column _buildNotificatinSettings() {
+  _buildNotificatinSettings() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -56,7 +77,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Card _buildSettingCard() {
+  _buildSettingCard() {
     return Card(
       elevation: 4.0,
       margin: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
@@ -80,111 +101,138 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Card _buldProfileCard(BuildContext context) {
-    return Card(
-      elevation: 8.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      color: const Color.fromARGB(255, 225, 225, 225),
-      child: ListTile(
-        onTap: () {
-          //open edit profile
-        },
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  _buldProfileCard(BuildContext context, User user) {
+    return Column(
+      children: [
+        InkWell(
+          child: Card(
+            elevation: 8.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            color: const Color.fromARGB(255, 225, 225, 225),
+            child: ListTile(
+              onTap: () {
+                //open edit profile
+              },
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name.toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  _buildDivider(),
+                  const SizedBox(height: 5),
+                  Text(
+                    user.phone,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  _buildDivider(),
+                  const SizedBox(height: 5),
+                  Text(
+                    user.email.toLowerCase(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ],
+              ),
+              trailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    isVisible = !isVisible;
+                  });
+                },
+                icon: const Icon(Icons.edit),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _buildPersonalFormDialog(BuildContext context) {
+    UserBloc bloc = BlocProvider.of<UserBloc>(context);
+    return Visibility(
+      visible: isVisible,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           children: [
-            const Text(
-              "Krishna Bdr. Shrestha",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
+            DividerWithText(text: 'Personal\'s Details'),
+            const SizedBox(height: 15),
+            TextFieldWidget(
+              icon: FontAwesomeIcons.user,
+              hintText: 'Your Full name',
+              labelText: 'Name',
+              controller: bloc.tecName,
             ),
-            const SizedBox(height: 5),
-            _buildDivider(),
-            const SizedBox(height: 5),
-            const Text(
-              "9841705845",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w300,
-              ),
+            const SizedBox(height: 15),
+            TextFieldWidget(
+              icon: FontAwesomeIcons.mobile,
+              hintText: '9800000000',
+              labelText: 'Phone',
+              controller: bloc.tecPhone,
             ),
-            const SizedBox(height: 5),
-            _buildDivider(),
-            const SizedBox(height: 5),
-            const Text(
-              "krishna705844@gmail.com",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w300,
+            const SizedBox(height: 15),
+            TextFieldWidget(
+              icon: FontAwesomeIcons.envelope,
+              hintText: 'youremail@gmail.com',
+              labelText: 'E-mail',
+              controller: bloc.tecEmail,
+            ),
+            const SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return BlocProvider(
+                              create: (context) => bloc..add(UpdateUser()),
+                              child: BlocBuilder<UserBloc, UserState>(
+                                builder: (context, state) {
+                                  if (state is UpdatedUser) {
+                                    return _buildAlert(context, state);
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            );
+                          }
+                          //return const SizedBox.shrink();
+
+                          );
+                    },
+                    child: const Text('UPDATE')),
               ),
             ),
           ],
         ),
-        trailing: IconButton(
-          color: Colors.black,
-          onPressed: () {
-            _buildPersonalFormDialog(context);
-          },
-          icon: const Icon(Icons.edit),
-        ),
       ),
+    
     );
   }
 
-  Future<dynamic> _buildPersonalFormDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: const Color.fromARGB(255, 225, 225, 225),
-            content: SizedBox(
-              height: 350,
-              child: Card(
-                elevation: 10,
-                color: const Color.fromARGB(255, 225, 225, 225),
-                shadowColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      DividerWithText(text: 'Personal\'s Details'),
-                      const SizedBox(height: 15),
-                      TextFieldWidget(
-                        icon: FontAwesomeIcons.user,
-                        hintText: 'Your Full name',
-                        labelText: 'Name',
-                        controller: TextEditingController(),
-                      ),
-                      const SizedBox(height: 15),
-                      TextFieldWidget(
-                        icon: FontAwesomeIcons.mobile,
-                        hintText: '9800000000',
-                        labelText: 'Phone',
-                        controller: TextEditingController(),
-                      ),
-                      const SizedBox(height: 15),
-                      TextFieldWidget(
-                        icon: FontAwesomeIcons.envelope,
-                        hintText: 'youremail@gmail.com',
-                        labelText: 'E-mail',
-                        controller: TextEditingController(),
-                      ),
-                      const SizedBox(height: 15),
-                      _buildSubmitButton(context),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        });
-  }
-
-  Container _buildDivider() {
+  _buildDivider() {
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: 8.0,
@@ -195,19 +243,53 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  _buildSubmitButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: 50,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.green,
-            ),
-            onPressed: () {},
-            child: const Text('UPDATE')),
+  _buildAlert(BuildContext context, UpdatedUser state) {
+    return AlertDialog(
+      backgroundColor: (state.isUpdate == true)
+          ? const Color.fromARGB(255, 59, 139, 62)
+          : Colors.red,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          (state.isUpdate == true)
+              ? const Icon(
+                  Icons.check,
+                  size: 35,
+                  color: Colors.white,
+                )
+              : const Icon(
+                  Icons.error,
+                  size: 35,
+                  color: Colors.white,
+                ),
+          const SizedBox(width: 10),
+          Text(
+            (state.isUpdate == true) ? 'SUCCESSFUL !!!' : 'UN-SUCESSFUL !!!',
+            style: const TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ],
       ),
+      content: Text(state.message),
+      actions: <Widget>[
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.green,
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              '/',
+            );
+          },
+          child: Row(
+            children: const [
+              Icon(Icons.home),
+              SizedBox(width: 5),
+              Text('Home'),
+            ],
+          ),
+        ),
+      ],
     );
   }
+
 }

@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vehicle_reseller/presentation/views/custom_appbar.dart';
+import 'package:vehicle_reseller/presentation/widgets/custom_appbar.dart';
 import 'package:vehicle_reseller/presentation/widgets/purchase_details.dart';
 
 class CarPage extends StatelessWidget {

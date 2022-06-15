@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vehicle_reseller/data/model/owner/owner.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vehicle_reseller/data/model/user/user.dart';
+import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
 import 'package:vehicle_reseller/presentation/widgets/home/home_widets.dart';
 
 class HomePage extends StatelessWidget {
@@ -8,32 +11,53 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 35),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed('/settingsPage');
-                },
-                child: NameCard(
-                  owner: Owner(
-                      name: 'Krishna Bdr. Shrestha',
-                      phone: '98417058455',
-                      email: 'krishna705844@gmail.com'),
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        if (state is ReceivedUserData) {
+          return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.remove('user');
+              },
+              child: const Icon(Icons.add),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 35),
+                    BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        if (state is ReceivedUserData) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed('/settingsPage');
+                            },
+                            child: NameCard(
+                                user: User(
+                                    name: state.user.name,
+                                    phone: state.user.phone,
+                                    email: state.user.email)),
+                          );
+                        }
+                        return const Text('No Received data');
+                      },
+                    ),
+                    const SizedBox(height: 35),
+                    _buildIconCard(context),
+                    const SizedBox(height: 35),
+                    //_buildTransactionCard(),
+                  ],
                 ),
               ),
-              const SizedBox(height: 35),
-              _buildIconCard(context),
-              const SizedBox(height: 35),
-              //_buildTransactionCard(),
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 

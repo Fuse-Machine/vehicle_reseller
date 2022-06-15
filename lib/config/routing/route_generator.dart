@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vehicle_reseller/presentation/blocs/buy/buy_bloc.dart';
+import 'package:vehicle_reseller/presentation/blocs/repair/repair_bloc.dart';
+import 'package:vehicle_reseller/presentation/blocs/sell/sell_bloc.dart';
+import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
+import 'package:vehicle_reseller/presentation/views/bottom_navigation_tab.dart';
 import 'package:vehicle_reseller/presentation/views/buy/buy_form.dart';
 import 'package:vehicle_reseller/presentation/views/buy_page.dart';
 import 'package:vehicle_reseller/presentation/views/car_page.dart';
@@ -17,33 +23,57 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => const HomePage());
+      case '/bottomNavigation':
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider(
+            create: (_) => UserBloc()..add(FetchUser()),
+            child: const BottomNavigationTab(),
+          );
+        });
+      //return MaterialPageRoute(builder: (_) => const BottomNavigationTab());
 
       case '/sellPage':
         return MaterialPageRoute(builder: (_) => const SellPage());
-      // if (args is List<Car>) {
-      //   return MaterialPageRoute(builder: (_) {
-      //     return BlocProvider(
-      //       create: (_) => CarBloc(),
-      //       child: CarListView(
-      //         cars: args,
-      //       ),
-      //     );
-      //   });
 
       case '/buyPage':
         return MaterialPageRoute(builder: (_) => const BuyPage());
+
       case '/repairPage':
         return MaterialPageRoute(builder: (_) => const RepairPage());
+
       case '/buyForm':
-        return MaterialPageRoute(builder: (_) => const BuyForm());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => BuyBloc(),
+                  child: BuyForm(),
+                ));
+
       case '/sellForm':
-        return MaterialPageRoute(builder: (_) => const SellForm());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => SellBloc(),
+                  child: SellForm(),
+                ));
+
       case '/repairForm':
-        return MaterialPageRoute(builder: (_) => const RepairForm());
+        return MaterialPageRoute(
+            builder: (_) =>  BlocProvider(
+                  create: (context) => RepairBloc(),
+                  child:RepairForm(),
+                ));
+
       case '/carPage':
         return MaterialPageRoute(builder: (_) => const CarPage());
+
       case '/settingsPage':
-        return MaterialPageRoute(builder: (_) => const SettingsPage());
+        //return MaterialPageRoute(builder: (_) => const SettingsPage());
+
+        return MaterialPageRoute(builder: (_) {
+          return BlocProvider(
+            create: (_) => UserBloc()..add(FetchUser()),
+            child: const SettingsPage(),
+          );
+        });
       case '/statementPage':
         return MaterialPageRoute(builder: (_) => const Statementpage());
     }

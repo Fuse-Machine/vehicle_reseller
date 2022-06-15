@@ -1,32 +1,44 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vehicle_reseller/presentation/blocs/buy/buy_bloc.dart';
 import 'package:vehicle_reseller/presentation/widgets/divider_with_text.dart';
 import 'package:vehicle_reseller/presentation/widgets/text_field_widget.dart';
 
 class BuyForm extends StatelessWidget {
-  const BuyForm({Key? key}) : super(key: key);
+  BuyForm({Key? key}) : super(key: key);
+  final buyFormKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    BuyBloc bloc = BlocProvider.of<BuyBloc>(context);
     return Scaffold(
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 35),
-            _buildCarForm(),
-            const SizedBox(height: 35),
-            _buildAgentForm(),
-            const SizedBox(height: 35),
-            _buildPaymentForm(),
-          ],
+        child: Form(
+          key: buyFormKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 35),
+              _buildCarForm(bloc),
+              const SizedBox(height: 35),
+              _buildAgentForm(bloc),
+              const SizedBox(height: 35),
+              _buildPaymentForm(bloc),
+              const SizedBox(height: 15),
+              _buildSubmitButton(context, bloc),
+              _showDialog(),
+            ],
+          ),
         ),
       )),
     );
   }
 
-  Card _buildCarForm() {
+  _buildCarForm(BuyBloc bloc) {
     return Card(
       elevation: 10,
       color: const Color.fromARGB(255, 225, 225, 225),
@@ -41,47 +53,46 @@ class BuyForm extends StatelessWidget {
             DividerWithText(text: 'Car Details'),
             const SizedBox(height: 15),
             TextFieldWidget(
-              hintText: 'Select the dat',
+              hintText: 'Select the date',
               labelText: 'Date',
               icon: FontAwesomeIcons.calendar,
               readOnly: true,
+              controller: bloc.tecDate,
               onTap: () {},
-              controller: TextEditingController(),
             ),
             const SizedBox(height: 15),
             TextFieldWidget(
-              icon: Icons.numbers,
-              hintText: 'BA 1 JA 0000',
-              labelText: 'NUMBER PLATE',
-              controller: TextEditingController(),
-            ),
+                icon: Icons.numbers,
+                hintText: 'BA 1 JA 0000',
+                labelText: 'NUMBER PLATE',
+                controller: bloc.tecNumberPlate),
             const SizedBox(height: 15),
             TextFieldWidget(
               icon: FontAwesomeIcons.carRear,
               hintText: 'Taxi or Car',
               labelText: 'Vechicle Type',
-              controller: TextEditingController(),
+              controller: bloc.tecType,
             ),
             const SizedBox(height: 15),
             TextFieldWidget(
               icon: Icons.menu,
               hintText: 'Alto, Maruti 800',
               labelText: 'Model',
-              controller: TextEditingController(),
+              controller: bloc.tecModel,
             ),
             const SizedBox(height: 15),
             TextFieldWidget(
               icon: Icons.colorize,
               hintText: 'White,Silver',
               labelText: 'color',
-              controller: TextEditingController(),
+              controller: bloc.tecColor,
             ),
             const SizedBox(height: 15),
             TextFieldWidget(
               icon: FontAwesomeIcons.calendarDay,
               hintText: '2004,2005',
               labelText: 'Manufactre Year',
-              controller: TextEditingController(),
+              controller: bloc.tecYear,
             ),
             const SizedBox(height: 15),
           ],
@@ -90,7 +101,7 @@ class BuyForm extends StatelessWidget {
     );
   }
 
-  _buildAgentForm() {
+  _buildAgentForm(BuyBloc bloc) {
     return Card(
       elevation: 10,
       color: const Color.fromARGB(255, 225, 225, 225),
@@ -108,14 +119,14 @@ class BuyForm extends StatelessWidget {
               icon: Icons.person,
               hintText: 'Rajesh Hamal',
               labelText: 'Name',
-              controller: TextEditingController(),
+              controller: bloc.tecSellerName,
             ),
             const SizedBox(height: 15),
             TextFieldWidget(
               icon: FontAwesomeIcons.mobile,
               hintText: '9841000000',
               labelText: 'Mobile No',
-              controller: TextEditingController(),
+              controller: bloc.tecSellerPhone,
             ),
             const SizedBox(height: 15),
           ],
@@ -124,7 +135,7 @@ class BuyForm extends StatelessWidget {
     );
   }
 
-  _buildPaymentForm() {
+  _buildPaymentForm(BuyBloc bloc) {
     return Card(
       elevation: 10,
       color: const Color.fromARGB(255, 225, 225, 225),
@@ -142,26 +153,136 @@ class BuyForm extends StatelessWidget {
               icon: FontAwesomeIcons.indianRupeeSign,
               hintText: '1500000',
               labelText: 'Total Amount',
-              controller: TextEditingController(),
+              controller: bloc.tecTotalAmount,
             ),
             const SizedBox(height: 15),
             TextFieldWidget(
               icon: FontAwesomeIcons.indianRupeeSign,
               hintText: '1000000',
               labelText: 'Advance Amount',
-              controller: TextEditingController(),
+              controller: bloc.tecAdvanceAmount,
             ),
             const SizedBox(height: 15),
             TextFieldWidget(
               icon: FontAwesomeIcons.calendarDay,
               hintText: '15-May 2022',
               labelText: 'Pass Date',
-              controller: TextEditingController(),
+              controller: bloc.tecExpectedPassdate,
             ),
             const SizedBox(height: 15),
           ],
         ),
       ),
+    );
+  }
+
+  _buildSubmitButton(BuildContext context, BuyBloc bloc) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 50,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.green,
+            ),
+            onPressed: () {
+              if (buyFormKey.currentState!.validate()) {
+                BlocProvider.of<BuyBloc>(context).add(BuyCar());
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.lightBlue,
+                    content: const Text(
+                      'Please fill up the required fields',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    action: SnackBarAction(
+                      label: 'Ok',
+                      onPressed: () {},
+                      textColor: Colors.white,
+                    ),
+                  ),
+                );
+              }
+              BlocBuilder<BuyBloc, BuyState>(builder: (context, state) {
+                if (state is BoughtStatus) {
+                  log('Bought Status');
+                  //return _buildAlert(context, state);
+                }
+                return const SizedBox.shrink();
+              });
+            },
+            child: const Text('BUY')),
+      ),
+    );
+  }
+
+  _buildAlert(BuildContext context, BoughtStatus state) {
+    return AlertDialog(
+      backgroundColor: (state.isBought == true)
+          ? const Color.fromARGB(255, 59, 139, 62)
+          : Colors.red,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          (state.isBought == true)
+              ? const Icon(
+                  Icons.check,
+                  size: 35,
+                  color: Colors.white,
+                )
+              : const Icon(
+                  Icons.error,
+                  size: 35,
+                  color: Colors.white,
+                ),
+          const SizedBox(width: 10),
+          Text(
+            (state.isBought == true) ? 'SUCCESSFUL !!!' : 'UN-SUCESSFUL !!!',
+            style: const TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ],
+      ),
+      content: Text(state.message),
+      actions: <Widget>[
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.green,
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              '/',
+            );
+          },
+          child: Row(
+            children: const [
+              Icon(Icons.home),
+              SizedBox(width: 5),
+              Text('Home'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  _showDialog() {
+    return BlocListener<BuyBloc, BuyState>(
+      listener: (context, state) {
+        if (state is BoughtStatus) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return _buildAlert(context, state);
+            },
+          );
+        }
+      },
+      child: const SizedBox.shrink(),
     );
   }
 }

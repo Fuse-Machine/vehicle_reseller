@@ -8,6 +8,7 @@ class TextFieldWidget extends StatelessWidget {
   bool readOnly;
   VoidCallback? onTap;
   TextEditingController controller;
+
   TextFieldWidget({
     Key? key,
     required this.hintText,
@@ -18,10 +19,27 @@ class TextFieldWidget extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
+  List<String> requiredFields = [
+    'number plate',
+    'vechicle type',
+    'name',
+    'mobile no',
+    'total amount',
+    'advance amount',
+    'pass date',
+    'heading',
+    'amount',
+  ];
+  List<String> requiredNumberFields = [
+    'mobile no',
+    'total amount',
+    'advance amount',
+    'amount'
+  ];
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 75,
       child: TextFormField(
         controller: controller,
         readOnly: readOnly,
@@ -35,21 +53,29 @@ class TextFieldWidget extends StatelessWidget {
             ),
             hintText: hintText,
             labelText: labelText),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please enter some text';
-          }
-          return null;
-        },
-        onEditingComplete: () {},
+        validator: (value) => _validator(value!),
       ),
     );
   }
 
-  String? validName(String? value) {
-    if (value!.isEmpty) return 'Name is Required';
-    final RegExp nameExp = RegExp(r'^[a-zA-Z] \s+$');
-    if (!nameExp.hasMatch(value)) return 'Please enter Alphabet Only';
-    return null;
+  _validator(String? value) {
+    if (requiredFields.contains(labelText.toLowerCase())) {
+      if (value == null || value.isEmpty) {
+        return '* Required';
+      } else {
+        if (requiredNumberFields.contains(labelText.toLowerCase())) {
+          final number = int.tryParse(value);
+          if (number == null) {
+            return '* Numbers Only';
+          }
+          if ('mobile no' == labelText.toLowerCase()) {
+            if (value.length != 10) {
+              return '* 10 Numbers Required';
+            }
+          }
+        }
+        return null;
+      }
+    }
   }
 }

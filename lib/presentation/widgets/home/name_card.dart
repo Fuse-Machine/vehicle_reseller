@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vehicle_reseller/data/model/owner/owner.dart';
+import 'package:vehicle_reseller/data/model/user/user.dart';
 
 // ignore: must_be_immutable
 class NameCard extends StatelessWidget {
-  Owner owner;
-  NameCard({Key? key, required this.owner}) : super(key: key);
+  User user;
+  NameCard({Key? key,required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class NameCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  owner.name,
+                  user.name,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -37,9 +37,9 @@ class NameCard extends StatelessWidget {
                   indent: 70,
                 ),
                 const SizedBox(height: 10),
-                Text(owner.phone),
+                Text(user.phone),
                 const SizedBox(height: 10),
-                Text(owner.email!),
+                Text(user.email),
               ],
             ),
           ),
