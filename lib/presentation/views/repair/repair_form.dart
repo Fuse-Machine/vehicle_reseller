@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/presentation/blocs/repair/repair_bloc.dart';
+import 'package:vehicle_reseller/presentation/widgets/alert_dialog_widget.dart';
 import 'package:vehicle_reseller/presentation/widgets/divider_with_text.dart';
 import 'package:vehicle_reseller/presentation/widgets/repair_card.dart';
 import 'package:vehicle_reseller/presentation/widgets/text_field_widget.dart';
@@ -30,7 +31,22 @@ class RepairForm extends StatelessWidget {
               _buildRepairForm(bloc),
               const SizedBox(height: 15),
               _buildSubmitButton(context),
-              _showDialog(),
+               BlocListener<RepairBloc, RepairState>(
+                listener: (context, state) {
+                  if (state is RepairStatus) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialogWidget(
+                          status: state.status,
+                          message: state.message,
+                        );
+                      },
+                    );
+                  }
+                },
+                child: const SizedBox.shrink(),
+              ),
             ],
           ),
         ),
@@ -145,68 +161,69 @@ class RepairForm extends StatelessWidget {
     );
   }
 
-  _buildAlert(BuildContext context, RepairStatus state) {
-    return AlertDialog(
-      backgroundColor: (state.isUpdate == true)
-          ? const Color.fromARGB(255, 59, 139, 62)
-          : Colors.red,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          (state.isUpdate == true)
-              ? const Icon(
-                  Icons.check,
-                  size: 35,
-                  color: Colors.white,
-                )
-              : const Icon(
-                  Icons.error,
-                  size: 35,
-                  color: Colors.white,
-                ),
-          const SizedBox(width: 10),
-          Text(
-            (state.isUpdate == true) ? 'SUCCESSFUL !!!' : 'UN-SUCESSFUL !!!',
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ],
-      ),
-      content: Text(state.message),
-      actions: <Widget>[
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.green,
-          ),
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              '/',
-            );
-          },
-          child: Row(
-            children: const [
-              Icon(Icons.home),
-              SizedBox(width: 5),
-              Text('Home'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  // _buildAlert(BuildContext context, RepairStatus state) {
+  //   return AlertDialog(
+  //     backgroundColor: (state.isUpdate == true)
+  //         ? const Color.fromARGB(255, 59, 139, 62)
+  //         : Colors.red,
+  //     title: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         (state.isUpdate == true)
+  //             ? const Icon(
+  //                 Icons.check,
+  //                 size: 35,
+  //                 color: Colors.white,
+  //               )
+  //             : const Icon(
+  //                 Icons.error,
+  //                 size: 35,
+  //                 color: Colors.white,
+  //               ),
+  //         const SizedBox(width: 10),
+  //         Text(
+  //           (state.isUpdate == true) ? 'SUCCESSFUL !!!' : 'UN-SUCESSFUL !!!',
+  //           style: const TextStyle(fontSize: 20, color: Colors.white),
+  //         ),
+  //       ],
+  //     ),
+  //     content: Text(state.message),
+  //     actions: <Widget>[
+  //       ElevatedButton(
+  //         style: ElevatedButton.styleFrom(
+  //           primary: Colors.green,
+  //         ),
+  //         onPressed: () {
+  //           Navigator.of(context).pushNamed(
+  //             '/',
+  //           );
+  //         },
+  //         child: Row(
+  //           children: const [
+  //             Icon(Icons.home),
+  //             SizedBox(width: 5),
+  //             Text('Home'),
+  //           ],
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  _showDialog() {
-    return BlocListener<RepairBloc, RepairState>(
-      listener: (context, state) {
-        if (state is RepairStatus) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return _buildAlert(context, state);
-            },
-          );
-        }
-      },
-      child: const SizedBox.shrink(),
-    );
-  }
+  // _showDialog() {
+  //   return BlocListener<RepairBloc, RepairState>(
+  //     listener: (context, state) {
+  //       if (state is RepairStatus) {
+  //         showDialog(
+  //           context: context,
+  //           builder: (BuildContext context) {
+  //             return _buildAlert(context, state);
+  //           },
+  //         );
+  //       }
+  //     },
+  //     child: const SizedBox.shrink(),
+  //   );
+  // }
+
 }

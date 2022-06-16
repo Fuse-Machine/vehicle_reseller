@@ -35,4 +35,18 @@ class BuyRepository {
     }
     return null;
   }
+
+  Future<Buy?> getBought() async {
+    final db = await VehicleResellerDatabase.instance.database;
+    String sql = '''
+      SELECT * FROM buy
+      JOIN seller  ON buy.sellerId = seller.id
+      JOIN car ON buy.carId = car.id
+    ''';
+    var result = await db.query(sql);
+    if (result.isNotEmpty) {
+      return Buy.fromJson(result.first);
+    }
+    return null;
+  }
 }

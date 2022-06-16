@@ -5,7 +5,7 @@ abstract class RepairState {}
 class RepairInitial extends RepairState {}
 
 class RepairStatus extends RepairState {
-  bool isUpdate;
+  String status;
   String message;
-  RepairStatus({required this.isUpdate, required this.message});
+  RepairStatus({required this.status, required this.message});
 }

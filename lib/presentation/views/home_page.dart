@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/data/model/user/user.dart';
-import 'package:vehicle_reseller/data/repositories/buy_repository.dart';
 import 'package:vehicle_reseller/data/repositories/car_repository.dart';
-import 'package:vehicle_reseller/data/repositories/seller_repository.dart';
+import 'package:vehicle_reseller/data/repositories/repair_repository.dart';
 import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
 import 'package:vehicle_reseller/presentation/widgets/home/home_widets.dart';
 
@@ -22,11 +21,13 @@ class HomePage extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
                 var car = await CarRepository().getAll();
-                var seller = await SellerRepository().getAll();
-                var buy = await BuyRepository().getAll();
+                // var seller = await SellerRepository().getAll();
+                // var buy = await BuyRepository().getAll();
+                var repair = await RepairRepository().getAll();
                 log(car.toString());
-                log(seller.toString());
-                log(buy.toString());
+                // log(seller.toString());
+                // log(buy.toString());
+                log(repair.toString());
               },
               child: const Icon(Icons.add),
             ),

@@ -6,6 +6,7 @@ import 'package:vehicle_reseller/presentation/blocs/repair/repair_bloc.dart';
 import 'package:vehicle_reseller/presentation/blocs/sell/sell_bloc.dart';
 import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
 import 'package:vehicle_reseller/presentation/views/bottom_navigation_tab.dart';
+
 void main() {
   runApp(const MyApp());
 }

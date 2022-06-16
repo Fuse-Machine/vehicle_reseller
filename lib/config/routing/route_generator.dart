@@ -57,9 +57,9 @@ class RouteGenerator {
 
       case '/repairForm':
         return MaterialPageRoute(
-            builder: (_) =>  BlocProvider(
+            builder: (_) => BlocProvider(
                   create: (context) => RepairBloc(),
-                  child:RepairForm(),
+                  child: RepairForm(),
                 ));
 
       case '/carPage':

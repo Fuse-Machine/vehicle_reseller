@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -221,6 +223,13 @@ class BuyBloc extends Bloc<BuyEvent, BuyState> {
         // } catch (error) {
         //   log(error.toString());
         // }
+      }
+
+      if (event is FetchBuy) {
+        log('event is called');
+        Buy? buy = await BuyRepository().getBought();
+        log(buy.toString());
+        emit(ReceivedBuy(buy: null));
       }
     });
   }
