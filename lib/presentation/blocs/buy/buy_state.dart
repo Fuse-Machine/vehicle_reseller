@@ -5,7 +5,7 @@ abstract class BuyState {}
 class BuyInitial extends BuyState {}
 
 class BoughtStatus extends BuyState {
-  bool isBought;
+  String status;
   String message;
-  BoughtStatus({required this.isBought, required this.message});
+  BoughtStatus({required this.status, required this.message});
 }

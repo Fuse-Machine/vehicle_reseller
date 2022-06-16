@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/presentation/blocs/sell/sell_bloc.dart';
+import 'package:vehicle_reseller/presentation/widgets/alert_dialog_widget.dart';
 import 'package:vehicle_reseller/presentation/widgets/divider_with_text.dart';
 import 'package:vehicle_reseller/presentation/widgets/purchase_details.dart';
 import 'package:vehicle_reseller/presentation/widgets/text_field_widget.dart';
@@ -32,7 +33,23 @@ class SellForm extends StatelessWidget {
               _buildPaymentForm(bloc),
               const SizedBox(height: 15),
               _buildSubmitButton(context, bloc),
-              _showDialog(),
+               //Displaying AlertDialog 
+              BlocListener<SellBloc, SellState>(
+                listener: (context, state) {
+                  if (state is SoldStatus) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialogWidget(
+                          status: 'success',
+                          message: state.message,
+                        );
+                      },
+                    );
+                  }
+                },
+                child: const SizedBox.shrink(),
+              ),
             ],
           ),
         ),
@@ -212,68 +229,5 @@ class SellForm extends StatelessWidget {
     );
   }
 
-  _showDialog() {
-    return BlocListener<SellBloc, SellState>(
-      listener: (context, state) {
-        if (state is SoldStatus) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return _buildAlert(context, state);
-            },
-          );
-        }
-      },
-      child: const SizedBox.shrink(),
-    );
-  }
 
-  _buildAlert(BuildContext context, SoldStatus state) {
-    return AlertDialog(
-      backgroundColor: (state.isSold == true)
-          ? const Color.fromARGB(255, 59, 139, 62)
-          : Colors.red,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          (state.isSold == true)
-              ? const Icon(
-                  Icons.check,
-                  size: 35,
-                  color: Colors.white,
-                )
-              : const Icon(
-                  Icons.error,
-                  size: 35,
-                  color: Colors.white,
-                ),
-          const SizedBox(width: 10),
-          Text(
-            (state.isSold == true) ? 'SUCCESSFUL !!!' : 'UN-SUCESSFUL !!!',
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ],
-      ),
-      content: Text(state.message),
-      actions: <Widget>[
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.green,
-          ),
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              '/',
-            );
-          },
-          child: Row(
-            children: const [
-              Icon(Icons.home),
-              SizedBox(width: 5),
-              Text('Home'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }

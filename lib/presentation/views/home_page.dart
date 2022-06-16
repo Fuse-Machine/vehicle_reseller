@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vehicle_reseller/data/model/user/user.dart';
+import 'package:vehicle_reseller/data/repositories/buy_repository.dart';
+import 'package:vehicle_reseller/data/repositories/car_repository.dart';
+import 'package:vehicle_reseller/data/repositories/seller_repository.dart';
 import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
 import 'package:vehicle_reseller/presentation/widgets/home/home_widets.dart';
 
@@ -17,8 +21,12 @@ class HomePage extends StatelessWidget {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.remove('user');
+                var car = await CarRepository().getAll();
+                var seller = await SellerRepository().getAll();
+                var buy = await BuyRepository().getAll();
+                log(car.toString());
+                log(seller.toString());
+                log(buy.toString());
               },
               child: const Icon(Icons.add),
             ),

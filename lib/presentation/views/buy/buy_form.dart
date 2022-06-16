@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/presentation/blocs/buy/buy_bloc.dart';
+import 'package:vehicle_reseller/presentation/widgets/alert_dialog_widget.dart';
 import 'package:vehicle_reseller/presentation/widgets/divider_with_text.dart';
 import 'package:vehicle_reseller/presentation/widgets/text_field_widget.dart';
 
@@ -14,6 +13,7 @@ class BuyForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BuyBloc bloc = BlocProvider.of<BuyBloc>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
           child: Padding(
@@ -24,13 +24,30 @@ class BuyForm extends StatelessWidget {
             children: [
               const SizedBox(height: 35),
               _buildCarForm(bloc),
+
               const SizedBox(height: 35),
               _buildAgentForm(bloc),
               const SizedBox(height: 35),
               _buildPaymentForm(bloc),
               const SizedBox(height: 15),
               _buildSubmitButton(context, bloc),
-              _showDialog(),
+              //Displaying AlertDialog
+              BlocListener<BuyBloc, BuyState>(
+                listener: (context, state) {
+                  if (state is BoughtStatus) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialogWidget(
+                          status: state.status,
+                          message: state.message,
+                        );
+                      },
+                    );
+                  }
+                },
+                child: const SizedBox.shrink(),
+              ),
             ],
           ),
         ),
@@ -208,81 +225,9 @@ class BuyForm extends StatelessWidget {
                   ),
                 );
               }
-              BlocBuilder<BuyBloc, BuyState>(builder: (context, state) {
-                if (state is BoughtStatus) {
-                  log('Bought Status');
-                  //return _buildAlert(context, state);
-                }
-                return const SizedBox.shrink();
-              });
             },
             child: const Text('BUY')),
       ),
-    );
-  }
-
-  _buildAlert(BuildContext context, BoughtStatus state) {
-    return AlertDialog(
-      backgroundColor: (state.isBought == true)
-          ? const Color.fromARGB(255, 59, 139, 62)
-          : Colors.red,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          (state.isBought == true)
-              ? const Icon(
-                  Icons.check,
-                  size: 35,
-                  color: Colors.white,
-                )
-              : const Icon(
-                  Icons.error,
-                  size: 35,
-                  color: Colors.white,
-                ),
-          const SizedBox(width: 10),
-          Text(
-            (state.isBought == true) ? 'SUCCESSFUL !!!' : 'UN-SUCESSFUL !!!',
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ],
-      ),
-      content: Text(state.message),
-      actions: <Widget>[
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.green,
-          ),
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              '/',
-            );
-          },
-          child: Row(
-            children: const [
-              Icon(Icons.home),
-              SizedBox(width: 5),
-              Text('Home'),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  _showDialog() {
-    return BlocListener<BuyBloc, BuyState>(
-      listener: (context, state) {
-        if (state is BoughtStatus) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return _buildAlert(context, state);
-            },
-          );
-        }
-      },
-      child: const SizedBox.shrink(),
     );
   }
 }
