@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:vehicle_reseller/data/model/buyer/buyer.dart';
 import 'package:vehicle_reseller/data/model/sell/sell.dart';
+import 'package:vehicle_reseller/data/repositories/sell_repository.dart';
 part 'sell_event.dart';
 part 'sell_state.dart';
 
@@ -26,7 +27,7 @@ class SellBloc extends Bloc<SellEvent, SellState> {
           .format(DateTime.now().add(const Duration(days: 10))));
 
   SellBloc() : super(SellInitial()) {
-    on<SellEvent>((event, emit) {
+    on<SellEvent>((event, emit) async {
       if (event is SellCar) {
         log('Event Called');
         var numberPlate = tecNumberPlate.text;
@@ -41,8 +42,8 @@ class SellBloc extends Bloc<SellEvent, SellState> {
 
         Sell sell = Sell(
             date: date,
-            carId: 1,
             buyerId: 1,
+            buyId: 1,
             totalAmount: int.parse(totalAmount),
             advanceAmount: int.parse(advanceAmount),
             expectedPassdate: expectedPassdate);
@@ -50,7 +51,16 @@ class SellBloc extends Bloc<SellEvent, SellState> {
         log('Car: $numberPlate');
         log('Buyer: $buyer');
         log('Sell: $sell');
-        emit(SoldStatus(isSold: true, message: 'Your ${numberPlate.toUpperCase()} is Sold'));
+        emit(SoldStatus(
+            isSold: true,
+            message: 'Your ${numberPlate.toUpperCase()} is Sold'));
+      }
+
+      if (event is FetchSellData) {
+        log('event is called');
+        List<Sell>? sells = await SellRepository().getAll();
+        log(sells.toString());
+        emit(ReceivedSellData(sells: null));
       }
     });
   }

@@ -225,11 +225,11 @@ class BuyBloc extends Bloc<BuyEvent, BuyState> {
         // }
       }
 
-      if (event is FetchBuy) {
+      if (event is FetchBuyData) {
         log('event is called');
-        Buy? buy = await BuyRepository().getBought();
-        log(buy.toString());
-        emit(ReceivedBuy(buy: null));
+        // Buy? buy = await BuyRepository().getBought();
+        // log(buy.toString());
+        emit(ReceivedBuyData(buy: null));
       }
     });
   }

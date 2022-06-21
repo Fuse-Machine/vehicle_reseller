@@ -36,4 +36,14 @@ class BuyerRepository {
     }
     return null;
   }
+
+  Future<int> getTotal() async {
+    final db = await VehicleResellerDatabase.instance.database;
+
+    var result = await db.query('buyer');
+    if (result.isNotEmpty) {
+      return result.length;
+    }
+    return 0;
+  }
 }

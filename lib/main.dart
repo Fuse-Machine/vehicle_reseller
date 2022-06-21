@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vehicle_reseller/config/routing/route_generator.dart';
 import 'package:vehicle_reseller/presentation/blocs/buy/buy_bloc.dart';
+import 'package:vehicle_reseller/presentation/blocs/home/home_bloc.dart';
 import 'package:vehicle_reseller/presentation/blocs/repair/repair_bloc.dart';
 import 'package:vehicle_reseller/presentation/blocs/sell/sell_bloc.dart';
 import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => RepairBloc(),
+          ),
+          BlocProvider(
+            create: (context) => HomeBloc()..add(FetchHomeData()),
           ),
         ],
         child: const BottomNavigationTab(),

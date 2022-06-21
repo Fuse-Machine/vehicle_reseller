@@ -8,12 +8,12 @@ class Sell with _$Sell {
   factory Sell({
     int? id,
     required String date,
-    required int carId,
     required int buyerId,
+    required int buyId,
     required int totalAmount,
     @Default(0) int advanceAmount,
     required String expectedPassdate,
-    String? acutalPassdate,
+    String? actualPassdate,
   }) = _Sell;
 
   factory Sell.fromJson(Map<String, dynamic> json) => _$SellFromJson(json);

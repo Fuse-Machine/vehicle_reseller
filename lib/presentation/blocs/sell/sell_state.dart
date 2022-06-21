@@ -9,3 +9,8 @@ class SoldStatus extends SellState {
   String message;
   SoldStatus({required this.isSold, required this.message});
 }
+
+class ReceivedSellData extends SellState {
+  List<Sell>? sells;
+  ReceivedSellData({required this.sells});
+}

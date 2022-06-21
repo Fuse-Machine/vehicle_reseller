@@ -1,7 +1,5 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vehicle_reseller/presentation/blocs/buy/buy_bloc.dart';
 import 'package:vehicle_reseller/presentation/views/buy_page.dart';
 import 'package:vehicle_reseller/presentation/views/home_page.dart';
 import 'package:vehicle_reseller/presentation/views/sell_page.dart';
@@ -30,10 +28,7 @@ class BottomNavigationTab extends StatelessWidget {
             case NavBarItem.home:
               return const HomePage();
             case NavBarItem.buy:
-              return BlocProvider(
-                create: (context) => BuyBloc()..add(FetchBuy()),
-                child: const BuyPage(),
-              );
+              return const BuyPage();
             case NavBarItem.sell:
               return const SellPage();
 

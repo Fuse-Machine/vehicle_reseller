@@ -2,8 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:vehicle_reseller/presentation/views/repair/repair_table.dart';
 import 'package:vehicle_reseller/presentation/widgets/divider_with_text.dart';
 
+// ignore: must_be_immutable
 class PurchaseDetails extends StatelessWidget {
-  const PurchaseDetails({Key? key}) : super(key: key);
+  String name;
+  String phone;
+  String numberPlate;
+  String totalPrice;
+  String transferStatus;
+
+  PurchaseDetails(
+      {Key? key,
+      required this.name,
+      required this.phone,
+      required this.numberPlate,
+      required this.totalPrice,
+      required this.transferStatus})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +34,19 @@ class PurchaseDetails extends StatelessWidget {
           children: [
             DividerWithText(text: 'Purchased Details'),
             const SizedBox(height: 15),
-            _buildRow('Name', 'Prayas Shrestha'),
+            _buildRow('Name', name),
             const Divider(thickness: 3),
-            _buildRow('Phone', '9841705845'),
+            _buildRow('Phone', phone),
             const Divider(thickness: 3),
-            _buildRow('Number Plate', 'Ba 1 jha 1995'.toUpperCase()),
+            _buildRow('Number Plate', numberPlate.toUpperCase()),
             const Divider(thickness: 3),
-            _buildRow('Total Price', '1550000'),
+            _buildRow('Total Price', totalPrice),
             const Divider(thickness: 3),
-            _buildRow('Transfer Status', 'Passed'),
+            _buildRow('Transfer Status', transferStatus),
             const Divider(thickness: 3),
-            _buildRow('Expenses', '25000'),
-            const Divider(thickness: 3),
-           const RepairTable(),
+            // _buildRow('Expenses', '25000'),
+            // const Divider(thickness: 3),
+            const RepairTable(),
           ],
         ),
       ),

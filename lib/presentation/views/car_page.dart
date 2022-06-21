@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/presentation/widgets/custom_appbar.dart';
-import 'package:vehicle_reseller/presentation/widgets/purchase_details.dart';
 
 class CarPage extends StatelessWidget {
   const CarPage({Key? key}) : super(key: key);
@@ -42,7 +41,7 @@ class CarPage extends StatelessWidget {
                 return const SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.all(28.0),
-                    child: PurchaseDetails(),
+                    //child: PurchaseDetails(),
                   ),
                 );
               },
@@ -64,7 +63,7 @@ class CarPage extends StatelessWidget {
                 return const SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.all(28.0),
-                    child: PurchaseDetails(),
+                    //child: PurchaseDetails(),
                   ),
                 );
               },

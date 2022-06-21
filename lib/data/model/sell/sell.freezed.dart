@@ -22,12 +22,12 @@ Sell _$SellFromJson(Map<String, dynamic> json) {
 mixin _$Sell {
   int? get id => throw _privateConstructorUsedError;
   String get date => throw _privateConstructorUsedError;
-  int get carId => throw _privateConstructorUsedError;
   int get buyerId => throw _privateConstructorUsedError;
+  int get buyId => throw _privateConstructorUsedError;
   int get totalAmount => throw _privateConstructorUsedError;
   int get advanceAmount => throw _privateConstructorUsedError;
   String get expectedPassdate => throw _privateConstructorUsedError;
-  String? get acutalPassdate => throw _privateConstructorUsedError;
+  String? get actualPassdate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,12 +41,12 @@ abstract class $SellCopyWith<$Res> {
   $Res call(
       {int? id,
       String date,
-      int carId,
       int buyerId,
+      int buyId,
       int totalAmount,
       int advanceAmount,
       String expectedPassdate,
-      String? acutalPassdate});
+      String? actualPassdate});
 }
 
 /// @nodoc
@@ -61,12 +61,12 @@ class _$SellCopyWithImpl<$Res> implements $SellCopyWith<$Res> {
   $Res call({
     Object? id = freezed,
     Object? date = freezed,
-    Object? carId = freezed,
     Object? buyerId = freezed,
+    Object? buyId = freezed,
     Object? totalAmount = freezed,
     Object? advanceAmount = freezed,
     Object? expectedPassdate = freezed,
-    Object? acutalPassdate = freezed,
+    Object? actualPassdate = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -77,13 +77,13 @@ class _$SellCopyWithImpl<$Res> implements $SellCopyWith<$Res> {
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      carId: carId == freezed
-          ? _value.carId
-          : carId // ignore: cast_nullable_to_non_nullable
-              as int,
       buyerId: buyerId == freezed
           ? _value.buyerId
           : buyerId // ignore: cast_nullable_to_non_nullable
+              as int,
+      buyId: buyId == freezed
+          ? _value.buyId
+          : buyId // ignore: cast_nullable_to_non_nullable
               as int,
       totalAmount: totalAmount == freezed
           ? _value.totalAmount
@@ -97,9 +97,9 @@ class _$SellCopyWithImpl<$Res> implements $SellCopyWith<$Res> {
           ? _value.expectedPassdate
           : expectedPassdate // ignore: cast_nullable_to_non_nullable
               as String,
-      acutalPassdate: acutalPassdate == freezed
-          ? _value.acutalPassdate
-          : acutalPassdate // ignore: cast_nullable_to_non_nullable
+      actualPassdate: actualPassdate == freezed
+          ? _value.actualPassdate
+          : actualPassdate // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -113,12 +113,12 @@ abstract class _$$_SellCopyWith<$Res> implements $SellCopyWith<$Res> {
   $Res call(
       {int? id,
       String date,
-      int carId,
       int buyerId,
+      int buyId,
       int totalAmount,
       int advanceAmount,
       String expectedPassdate,
-      String? acutalPassdate});
+      String? actualPassdate});
 }
 
 /// @nodoc
@@ -134,12 +134,12 @@ class __$$_SellCopyWithImpl<$Res> extends _$SellCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? date = freezed,
-    Object? carId = freezed,
     Object? buyerId = freezed,
+    Object? buyId = freezed,
     Object? totalAmount = freezed,
     Object? advanceAmount = freezed,
     Object? expectedPassdate = freezed,
-    Object? acutalPassdate = freezed,
+    Object? actualPassdate = freezed,
   }) {
     return _then(_$_Sell(
       id: id == freezed
@@ -150,13 +150,13 @@ class __$$_SellCopyWithImpl<$Res> extends _$SellCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as String,
-      carId: carId == freezed
-          ? _value.carId
-          : carId // ignore: cast_nullable_to_non_nullable
-              as int,
       buyerId: buyerId == freezed
           ? _value.buyerId
           : buyerId // ignore: cast_nullable_to_non_nullable
+              as int,
+      buyId: buyId == freezed
+          ? _value.buyId
+          : buyId // ignore: cast_nullable_to_non_nullable
               as int,
       totalAmount: totalAmount == freezed
           ? _value.totalAmount
@@ -170,9 +170,9 @@ class __$$_SellCopyWithImpl<$Res> extends _$SellCopyWithImpl<$Res>
           ? _value.expectedPassdate
           : expectedPassdate // ignore: cast_nullable_to_non_nullable
               as String,
-      acutalPassdate: acutalPassdate == freezed
-          ? _value.acutalPassdate
-          : acutalPassdate // ignore: cast_nullable_to_non_nullable
+      actualPassdate: actualPassdate == freezed
+          ? _value.actualPassdate
+          : actualPassdate // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -184,12 +184,12 @@ class _$_Sell implements _Sell {
   _$_Sell(
       {this.id,
       required this.date,
-      required this.carId,
       required this.buyerId,
+      required this.buyId,
       required this.totalAmount,
       this.advanceAmount = 0,
       required this.expectedPassdate,
-      this.acutalPassdate});
+      this.actualPassdate});
 
   factory _$_Sell.fromJson(Map<String, dynamic> json) => _$$_SellFromJson(json);
 
@@ -198,9 +198,9 @@ class _$_Sell implements _Sell {
   @override
   final String date;
   @override
-  final int carId;
-  @override
   final int buyerId;
+  @override
+  final int buyId;
   @override
   final int totalAmount;
   @override
@@ -209,11 +209,11 @@ class _$_Sell implements _Sell {
   @override
   final String expectedPassdate;
   @override
-  final String? acutalPassdate;
+  final String? actualPassdate;
 
   @override
   String toString() {
-    return 'Sell(id: $id, date: $date, carId: $carId, buyerId: $buyerId, totalAmount: $totalAmount, advanceAmount: $advanceAmount, expectedPassdate: $expectedPassdate, acutalPassdate: $acutalPassdate)';
+    return 'Sell(id: $id, date: $date, buyerId: $buyerId, buyId: $buyId, totalAmount: $totalAmount, advanceAmount: $advanceAmount, expectedPassdate: $expectedPassdate, actualPassdate: $actualPassdate)';
   }
 
   @override
@@ -223,8 +223,8 @@ class _$_Sell implements _Sell {
             other is _$_Sell &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.date, date) &&
-            const DeepCollectionEquality().equals(other.carId, carId) &&
             const DeepCollectionEquality().equals(other.buyerId, buyerId) &&
+            const DeepCollectionEquality().equals(other.buyId, buyId) &&
             const DeepCollectionEquality()
                 .equals(other.totalAmount, totalAmount) &&
             const DeepCollectionEquality()
@@ -232,7 +232,7 @@ class _$_Sell implements _Sell {
             const DeepCollectionEquality()
                 .equals(other.expectedPassdate, expectedPassdate) &&
             const DeepCollectionEquality()
-                .equals(other.acutalPassdate, acutalPassdate));
+                .equals(other.actualPassdate, actualPassdate));
   }
 
   @JsonKey(ignore: true)
@@ -241,12 +241,12 @@ class _$_Sell implements _Sell {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(date),
-      const DeepCollectionEquality().hash(carId),
       const DeepCollectionEquality().hash(buyerId),
+      const DeepCollectionEquality().hash(buyId),
       const DeepCollectionEquality().hash(totalAmount),
       const DeepCollectionEquality().hash(advanceAmount),
       const DeepCollectionEquality().hash(expectedPassdate),
-      const DeepCollectionEquality().hash(acutalPassdate));
+      const DeepCollectionEquality().hash(actualPassdate));
 
   @JsonKey(ignore: true)
   @override
@@ -263,12 +263,12 @@ abstract class _Sell implements Sell {
   factory _Sell(
       {final int? id,
       required final String date,
-      required final int carId,
       required final int buyerId,
+      required final int buyId,
       required final int totalAmount,
       final int advanceAmount,
       required final String expectedPassdate,
-      final String? acutalPassdate}) = _$_Sell;
+      final String? actualPassdate}) = _$_Sell;
 
   factory _Sell.fromJson(Map<String, dynamic> json) = _$_Sell.fromJson;
 
@@ -277,9 +277,9 @@ abstract class _Sell implements Sell {
   @override
   String get date => throw _privateConstructorUsedError;
   @override
-  int get carId => throw _privateConstructorUsedError;
-  @override
   int get buyerId => throw _privateConstructorUsedError;
+  @override
+  int get buyId => throw _privateConstructorUsedError;
   @override
   int get totalAmount => throw _privateConstructorUsedError;
   @override
@@ -287,7 +287,7 @@ abstract class _Sell implements Sell {
   @override
   String get expectedPassdate => throw _privateConstructorUsedError;
   @override
-  String? get acutalPassdate => throw _privateConstructorUsedError;
+  String? get actualPassdate => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_SellCopyWith<_$_Sell> get copyWith => throw _privateConstructorUsedError;

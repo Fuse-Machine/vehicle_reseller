@@ -1,12 +1,13 @@
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/data/model/user/user.dart';
-import 'package:vehicle_reseller/data/repositories/car_repository.dart';
-import 'package:vehicle_reseller/data/repositories/repair_repository.dart';
+import 'package:vehicle_reseller/presentation/blocs/home/home_bloc.dart';
+import 'package:vehicle_reseller/presentation/blocs/statement/statement_bloc.dart';
 import 'package:vehicle_reseller/presentation/blocs/user/user_bloc.dart';
+import 'package:vehicle_reseller/presentation/views/statement_page.dart';
 import 'package:vehicle_reseller/presentation/widgets/home/home_widets.dart';
 
 class HomePage extends StatelessWidget {
@@ -20,14 +21,19 @@ class HomePage extends StatelessWidget {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                var car = await CarRepository().getAll();
-                // var seller = await SellerRepository().getAll();
-                // var buy = await BuyRepository().getAll();
-                var repair = await RepairRepository().getAll();
-                log(car.toString());
-                // log(seller.toString());
-                // log(buy.toString());
-                log(repair.toString());
+                //Populate tables with static datas
+                // int value = await SampleData().populateDatabase();
+                // if (value == 1) {
+                //   log('Inserted');
+                // } else if (value == 0) {
+                //   log('Something is Wrong');
+                // }
+
+                // //display Datas
+                // SampleData().displayAllData();
+
+                // //Empty all tables
+                // SampleData().delete();
               },
               child: const Icon(Icons.add),
             ),
@@ -55,7 +61,14 @@ class HomePage extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 35),
-                    _buildIconCard(context),
+                    BlocBuilder<HomeBloc, HomeState>(
+                      builder: (context, state) {
+                        if (state is ReceivedHomeData) {
+                          return _buildIconCard(context, state);
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
                     const SizedBox(height: 35),
                     //_buildTransactionCard(),
                   ],
@@ -70,53 +83,98 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  _buildIconCard(BuildContext context) {
+  _buildIconCard(BuildContext context, ReceivedHomeData state) {
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconCard(
-              backgroundColor: const Color.fromARGB(255, 175, 250, 250),
-              title: 'Statement',
-              icon: FontAwesomeIcons.buildingColumns,
-              onTap: () {
-                Navigator.of(context).pushNamed('/statementPage');
-              },
+            Stack(
+              children: [
+                IconCard(
+                  backgroundColor: const Color.fromARGB(255, 175, 250, 250),
+                  title: 'Statement',
+                  icon: FontAwesomeIcons.buildingColumns,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider(
+                          create: (context) =>
+                              StatementBloc()..add(FetchStatementData()),
+                          child: const Statementpage(),
+                        ),
+                      ),
+                    );
+                    // Navigator.of(context).pushNamed('/statementPage');
+                  },
+                ),
+                (state.totalStatements != 0)
+                    ? CircleAvatar(
+                        radius: 20,
+                        child: Text((state.totalStatements.toString())),
+                      )
+                    : const SizedBox.shrink(),
+              ],
             ),
-            IconCard(
-              backgroundColor: const Color.fromARGB(255, 250, 175, 250),
-              title: 'Transfer',
-              icon: FontAwesomeIcons.arrowRightArrowLeft,
-              onTap: () {
-                Navigator.of(context).pushNamed('/sellForm');
-              },
+            Stack(
+              children: [
+                IconCard(
+                  backgroundColor: const Color.fromARGB(255, 250, 175, 250),
+                  title: 'Agents',
+                  icon: FontAwesomeIcons.person,
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/sellForm');
+                  },
+                ),
+                (state.totalAgents != 0)
+                    ? CircleAvatar(
+                        radius: 20,
+                        child: Text((state.totalAgents.toString())),
+                      )
+                    : const SizedBox.shrink(),
+              ],
             ),
-            //IconCard(text: 'Transaction', icon: Icons.money),
           ],
         ),
         const SizedBox(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconCard(
-              backgroundColor: const Color.fromARGB(255, 250, 250, 195),
-              title: 'Cars',
-              icon: FontAwesomeIcons.car,
-              onTap: () {
-                Navigator.of(context).pushNamed('/carPage');
-              },
+            Stack(
+              children: [
+                IconCard(
+                  backgroundColor: const Color.fromARGB(255, 250, 250, 195),
+                  title: 'Cars',
+                  icon: FontAwesomeIcons.car,
+                  onTap: () {},
+                ),
+                (state.totalCars != 0)
+                    ? CircleAvatar(
+                        radius: 20,
+                        child: Text((state.totalCars.toString())),
+                      )
+                    : const SizedBox.shrink(),
+              ],
             ),
-
-            IconCard(
-              backgroundColor: const Color.fromARGB(255, 180, 180, 180),
-              title: 'Repairs',
-              icon: FontAwesomeIcons.screwdriverWrench,
-              onTap: () {
-                Navigator.of(context).pushNamed('/repairPage');
-              },
+            Stack(
+              children: [
+                IconCard(
+                  backgroundColor: const Color.fromARGB(255, 180, 180, 180),
+                  title: 'Repairs',
+                  icon: FontAwesomeIcons.screwdriverWrench,
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/repairPage');
+                  },
+                ),
+                (state.totalRepairs != 0)
+                    ? CircleAvatar(
+                        radius: 20,
+                        child: Text((state.totalRepairs.toString())),
+                      )
+                    : const SizedBox.shrink(),
+              ],
             ),
-            //IconCard(text: 'Transaction', icon: Icons.money),
           ],
         ),
       ],

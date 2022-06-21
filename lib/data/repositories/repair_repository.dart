@@ -44,4 +44,14 @@ class RepairRepository {
     }
     return null;
   }
+
+  Future<int> getTotal() async {
+    final db = await VehicleResellerDatabase.instance.database;
+
+    var result = await db.query('repair');
+    if (result.isNotEmpty) {
+      return result.length;
+    }
+    return 0;
+  }
 }

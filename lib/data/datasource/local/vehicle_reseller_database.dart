@@ -11,7 +11,7 @@ class VehicleResellerDatabase {
   Future<Database> get database async {
     if (_database != null) return _database!;
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'vehicle_reseller.db');
+    final path = join(dbPath, 'vehicle_reseller5.db');
 
     return await openDatabase(path, version: 1, onCreate: _createTables);
   }
@@ -19,7 +19,7 @@ class VehicleResellerDatabase {
   Future _createTables(Database db, int version) async {
     await db.execute("CREATE TABLE car ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "numberPlate TEXT,"
+        "numberPlate TEXT UNIQUE,"
         "type TEXT,"
         "model TEXT,"
         "color TEXT,"
@@ -29,20 +29,20 @@ class VehicleResellerDatabase {
     await db.execute("CREATE TABLE buyer ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "name TEXT,"
-        "phone TEXT"
+        "phone TEXT UNIQUE"
         ")");
 
     await db.execute("CREATE TABLE seller ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "name TEXT,"
-        "phone TEXT"
+        "phone TEXT UNIQUE"
         ")");
 
     await db.execute("CREATE TABLE buy("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "date TEXT,"
-        "carId INTEGER,"
-        "sellerId INTEGER,"
+        "carId INTEGER UNIQUE,"
+        "sellerId INTEGER UNIQUE,"
         "totalAmount INTEGER,"
         "advanceAmount INTEGER,"
         "expectedPassdate TEXT,"
@@ -54,14 +54,14 @@ class VehicleResellerDatabase {
     await db.execute("CREATE TABLE sell("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "date TEXT,"
-        "carId INTEGER,"
-        "buyerId INTEGER,"
+        "buyerId INTEGER UNIQUE,"
+        "buyId INTEGER UNIQUE,"
         "totalAmount INTEGER,"
         "advanceAmount INTEGER,"
         "expectedPassdate TEXT,"
         "actualPassdate TEXT,"
-        "FOREIGN KEY (carId) REFERENCES car (id) ON DELETE NO ACTION ON UPDATE NO ACTION,"
-        "FOREIGN KEY (buyerId) REFERENCES buyer (id) ON DELETE NO ACTION ON UPDATE NO ACTION"
+        "FOREIGN KEY (buyerId) REFERENCES buyer (id) ON DELETE NO ACTION ON UPDATE NO ACTION,"
+        "FOREIGN KEY (buyId) REFERENCES buyer (id) ON DELETE NO ACTION ON UPDATE NO ACTION"
         ")");
 
     await db.execute("CREATE TABLE repair ("

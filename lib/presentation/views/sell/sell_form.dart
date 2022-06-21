@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vehicle_reseller/presentation/blocs/sell/sell_bloc.dart';
 import 'package:vehicle_reseller/presentation/widgets/alert_dialog_widget.dart';
 import 'package:vehicle_reseller/presentation/widgets/divider_with_text.dart';
-import 'package:vehicle_reseller/presentation/widgets/purchase_details.dart';
 import 'package:vehicle_reseller/presentation/widgets/text_field_widget.dart';
 
 class SellForm extends StatelessWidget {
@@ -28,7 +27,7 @@ class SellForm extends StatelessWidget {
               const SizedBox(height: 35),
               _buildAgentForm(bloc),
               const SizedBox(height: 35),
-              const PurchaseDetails(),
+              //const PurchaseDetails(),
               const SizedBox(height: 35),
               _buildPaymentForm(bloc),
               const SizedBox(height: 15),
